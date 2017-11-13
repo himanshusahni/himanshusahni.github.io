@@ -16,10 +16,7 @@
 title: Life, space and AI 
 email: himanshu@gatech.edu
 description: >- # this means to ignore newlines until "baseurl:"
-
-    “Think of how stupid the average person is, and realize half of them are stupider than that.”
-
-    ― George Carlin
+    “Think of how stupid the average person is, and realize half of them are stupider than that.” - George Carlin
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
