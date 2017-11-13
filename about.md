@@ -3,8 +3,11 @@ layout: page
 title: About
 permalink: /about/
 ---
-Hi! I'm a PhD student at Georgia Tech trying to figure out how to make robots do all my work. My research is on Reinforcement Learning because it is the most promising framework for general intelligent agent. Specifically I am working on compositionality and curriculum. The idea is humans never learn very hard tasks in isolation. We have years when we learn simple skills and build them up on top of each other to solve increasingly complex tasks. I want machines to learn to do
+Hi! I'm a PhD student at Georgia Tech trying to figure out how to make robots do all my work. My research is on Reinforcement Learning because it is the most promising framework for building intelligence. In my view, reinforcement learning can bind unsupervised and supervised learning in a way useful for taking actions in a real environment. These days, I am working on a small piece of intelligence: compositionality and curriculum. The idea is that humans never learn very hard tasks from scratch. We have years when we learn simple skills and build them up on top of each other to solve increasingly complex tasks. I want machines to learn to do
 the same. 
+
+I also believe that the reusability will be key to more general AI. Currently, if I train a Neural Network to identify dogs and cats, and I throw a panda into the mix, I will have to retrain the whole system from scratch with brand new weights. Or if in RL, I train an agent to pick up and drop of one passenger and I throw another passenger into the domain, instead of learning to simply sequence the two pickups/dropoffs in an optimal way, it learns a brand new local minima for the two passenger
+case. It is ridiculously inefficient to retrain basic skills every time you want to add a new capability to an agent. It will be like building a very expensive rocket booster and only using it for a single flight. Who does that?
 
 My advisor at Georgia Tech is [Dr. Charles Isbell](https://www.cc.gatech.edu/fac/Charles.Isbell/)
 
