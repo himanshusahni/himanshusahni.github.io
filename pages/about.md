@@ -1,9 +1,12 @@
 ---
 layout: page
 title: About
+feature-img: "assets/img/about.jpg"
 permalink: /about/
 ---
-Hi! I'm a PhD student at Georgia Tech trying to figure out how to make robots do all my work. My research is on Reinforcement Learning because it is the most promising framework for building general intelligence. In my view, reinforcement learning can bind unsupervised and supervised learning in a way that is useful for taking actions in a real environment. These days, I am working on a small piece of intelligence, compositionality and curriculum. The idea is that humans never learn very hard tasks from scratch. We have years to learn simple skills and build them up on top of each other to solve increasingly complex tasks. I want machines to learn to do
+Hi! I'm a PhD student at Georgia Tech trying to figure out how to make robots do all my work. My research is on Reinforcement Learning because it is the most promising framework for building general intelligence. In my view, reinforcement learning can bind unsupervised and supervised learning in a way that is useful for taking actions in a real environment. 
+
+These days, I am working on a small piece of intelligence, compositionality and curriculum. The idea is that humans never learn very hard tasks from scratch. We have years to learn simple skills and build them up on top of each other to solve increasingly complex tasks. I want machines to learn to do
 the same. 
 
 My advisor at Georgia Tech is [Dr. Charles Isbell](https://www.cc.gatech.edu/fac/Charles.Isbell/)
