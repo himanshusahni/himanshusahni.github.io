@@ -1,9 +1,11 @@
 ---
 layout: post
 title:  "Learning to Compose Skills"
+arxiv: "https://arxiv.org/abs/1711.11289"
+github: "https://github.com/himanshusahni/ComposeNet"
 date:   2017-12-14 -0500
-tags: [Artificial Intelligence, Reinforcement Learning]
 ---
+
 One of the weaknesses of vanilla deep reinforcement learning is that policies and values learned are typically limited to a single environment, the one the agent was trained on. 
 In other words, it is hard to transfer policies from one setting to another. 
 This is in sharp contrast to how humans learn to do stuff. 
@@ -132,10 +134,10 @@ On the y-axis is either the average episodic reward or episode length over 50 ev
         <img src="/assets/img/2017-12-12-reusability-in-ai/Collect_2_Evade_1.png" width="350" />
         <figcaption style= "text-align: center;">Collect blue while evading green</figcaption>
     </figure>
-    <figure style= "display: inline-block;">
-        <img src="/assets/img/2017-12-12-reusability-in-ai/Evade_0_and_Evade_1.png" width="350" />
-        <figcaption style= "text-align: center;">Evade red and green</figcaption>
-    </figure>
+    <!--<figure style= "display: inline-block;">-->
+        <!--<img src="/assets/img/2017-12-12-reusability-in-ai/Evade_0_and_Evade_1.png" width="350" />-->
+        <!--<figcaption style= "text-align: center;">Evade red and green</figcaption>-->
+    <!--</figure>-->
     <figure style= "display: inline-block;">
         <img src="/assets/img/2017-12-12-reusability-in-ai/Collect_0_then_Collect_1.png" width="350px" />
         <figcaption style= "text-align: center;">Collect red then green</figcaption>
@@ -160,6 +162,8 @@ So it learns to spam a single action.
 But it takes longer to get the more complicated control policy of alternating between running away from the enemy and moving towards the goal.
 Moreover, this is not even the optimal policy.
 The optimal behavior is blending the two skills together to make progress towards the goal *while* moving away from the enemy at the same time.
+
+For more results, check out our [Arxiv paper](https://arxiv.org/abs/1711.11289)!
 
 ### Zero Shot Compositions
 
