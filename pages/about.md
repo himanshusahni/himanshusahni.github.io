@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About
+shorttitle: About
 feature-img: "assets/img/about.jpg"
 permalink: /about/
 ---

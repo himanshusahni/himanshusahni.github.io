@@ -21,9 +21,9 @@
     <ul>
         {% for page in site.pages %}
         {% if page.title and page.hide != true %}
-        <li>
+        <li style="padding: 5px;">
             <a class="clear" href="{{ page.url | relative_url }}">
-                {{ page.title }}
+                {{ page.shorttitle }}
             </a>
         </li>
         {% endif %}
