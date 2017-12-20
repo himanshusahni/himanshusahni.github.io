@@ -1,8 +1,8 @@
 --- 
 layout: bootstrap 
-title : Sci Fi 
+title : Science Fiction 
 permalink: /scifi/
-subtitle: "Stuff like this got me into this research mess in the first place!" 
+subtitle: "or stuff that I wish we could do by now"
 feature-img: "assets/img/mars.png"
 ---
 
@@ -11,13 +11,16 @@ feature-img: "assets/img/mars.png"
     <div class="row">
         {% for item in site.portfolio %}
         <div class="col-sm-4 col-xs-4 portfolio-item">
-            <a href="{{ site.baseurl }}//{{ item.url }}" class="portfolio-link" data-keyboard="true">
+            <a href="{{ item.url }}" class="portfolio-link" data-keyboard="true">
                 <div class="caption" title="{{ item.title }}">
                     <div class="caption-content">
                         <i class="fa fa-search-plus fa-3x"></i>
                     </div>
                 </div>
                 <img src="{{ site.baseurl }}/{{ item.img }}" class="" alt="">
+                <div style="text-align:center;">
+                {{item.title}}
+                </div>
             </a>
         </div>
         {% endfor %}
