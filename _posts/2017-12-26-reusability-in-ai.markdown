@@ -3,7 +3,7 @@ layout: post
 title:  "Learning to Compose Skills"
 arxiv: "https://arxiv.org/abs/1711.11289"
 github: "https://github.com/himanshusahni/ComposeNet"
-date:   2017-12-14 -0500
+date:   2017-12-26 -0500
 ---
 
 One of the weaknesses of vanilla deep reinforcement learning is that policies and values learned are typically limited to a single environment, the one the agent was trained on. 
@@ -66,7 +66,7 @@ $$\pi_c : f(\pi_{\theta_1}, \pi_{\theta_2} \lvert \theta_c)$$
 
 $$\theta_1$$ and $$\theta_2$$ are parameters of the individual skill policies, and $$\theta_c$$ are addditional parameters that do the composition.
 
-But, the final probability distribtion over actions, policy recommendations, from each skill may not contain enough information to blend them together. 
+But, the final probability distribution over actions, policy recommendations, from each skill may not contain enough information to blend them together. 
 They are recommedations from each skill individually, and do not say anything about the current state of the combined task. 
 We would instead like to embed information about the state and the skill policy into a single layer of a network, and provide the embedding to $$f$$ to *learn a composition* as the task requires. So, the
 final form of our composition function is
@@ -104,7 +104,7 @@ But the embedding networks are trained using only gradients from the appropriate
 ### Phase 2
 This gives us a nice modular structure that allows us to do stuff like,
 
-$$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy layer (fixed)        }   \underbrace{p(e_1 \lvert s; \theta_1)}_\text{skill 1 (fixed)} \underbrace{p(e_c \lvert e_1, e_2; \theta_c)}_\text{        compose embedding        }  \underbrace{p(e_2 \lvert s; \theta_2)}_\text{skill 2 (fixed)}$$
+$$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy layer (fixed)} \quad \underbrace{p(e_c \lvert e_1, e_2; \theta_c)}_\text{compose embedding}   \quad \underbrace{p(e_1 \lvert s; \theta_1)}_\text{skill 1 (fixed)} \quad  \underbrace{p(e_2 \lvert s; \theta_2)}_\text{skill 2 (fixed)}$$
 
 Or, the policy layer outputs a policy for the composed task given a composed embedding $$e_c$$, which is obtained by combining embeddings from skill 1 and skill 2. 
 Note that the composition embedding parameters, $$\theta_c$$, is the only set of parameters that needs to be learned now, as the skill embedding and policy layer parameters have already been learned in phase 1 and are kept fixed.
@@ -115,7 +115,7 @@ Here is the above equation in practice.
 What's nice about this modular structure is we can construct arbitrary trees, or hierarchies, of skills and their compositions can be learned very quickly. 
 For example, here is the composition for the task "collect the red object *while* evading the green enemy *and* the blue enemy", 
 
-$$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy layer (fixed)        }   \underbrace{p(e_r \lvert s; \theta_r)}_\text{collect red skill (fixed)} \underbrace{p(e_c \lvert e_r, e_{and}; \theta_{while})}_\text{while composition}  \underbrace{p(e_{\neg g} \lvert s; \theta_{\neg g})}_\text{evade green skill (fixed)} \underbrace{p(e_{and} \lvert e_{\neg g}, e_{\neg b}; \theta_{and})}_\text{and composition} \underbrace{p(e_{\neg b} \lvert s; \theta_{\neg b})}_\text{evade blue skill (fixed)}$$
+$$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy layer (fixed)} \; \underbrace{p(e_c \lvert e_r, e_{and}; \theta_{while})}_\text{while composition}   \; \underbrace{p(e_r \lvert s; \theta_r)}_\text{collect red skill (fixed)}  \; \underbrace{p(e_{and} \lvert e_{\neg g}, e_{\neg b}; \theta_{and})}_\text{and composition} \; \underbrace{p(e_{\neg g} \lvert s; \theta_{\neg g})}_\text{evade green skill (fixed)} \; \underbrace{p(e_{\neg b} \lvert s; \theta_{\neg b})}_\text{evade blue skill (fixed)}$$
 
 
 and the network,
