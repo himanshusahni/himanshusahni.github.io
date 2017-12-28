@@ -64,7 +64,7 @@ Let's write our equation down again, this time with the parameters.
 
 $$\pi_c : f(\pi_{\theta_1}, \pi_{\theta_2} \lvert \theta_c)$$
 
-$$\theta_1$$ and $$\theta_2$$ are parameters of the individual skill policies, and $$\theta_c$$ are addditional parameters that do the composition.
+$$\theta_1$$ and $$\theta_2$$ are parameters of the individual skill policies, and $$\theta_c$$ are additional parameters that do the composition.
 
 But, the final probability distribution over actions, policy recommendations, from each skill may not contain enough information to blend them together. 
 They are recommedations from each skill individually, and do not say anything about the current state of the combined task. 
@@ -97,7 +97,7 @@ This gif shows the training procedure for a single skill and the policy and skil
 
 Each skill has its own network that generates embeddings given a state.
 The policy layer takes any embedding and converts it to a distribution over actions which is executed in the environment. 
-Each skills is running in its own separate environment, with its own reward function (+1 for successfully completing the skill, -1 for failing, with a small step cost).
+Each skill is running in its own separate environment, with its own reward function (+1 for successfully completing the skill, -1 for failing, with a small step cost).
 Since the policy layer is shared, policy gradients from all skills are applied to it. 
 But the embedding networks are trained using only gradients from the appropriate skill.
 
@@ -108,11 +108,13 @@ $$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy laye
 
 Or, the policy layer outputs a policy for the composed task given a composed embedding $$e_c$$, which is obtained by combining embeddings from skill 1 and skill 2. 
 Note that the composition embedding parameters, $$\theta_c$$, is the only set of parameters that needs to be learned now, as the skill embedding and policy layer parameters have already been learned in phase 1 and are kept fixed.
-Here is the above equation in practice.
+This equation can be realized in practice using the following neural network architecture.
 
 {% include caption_img.html url="/assets/img/2017-12-12-reusability-in-ai/composenet-phase2.png" width="1000" description="Only the composition module needs to be trained for a new task"  %}
 
-What's nice about this modular structure is we can construct arbitrary trees, or hierarchies, of skills and their compositions can be learned very quickly. 
+We call this architecture ComposeNet.
+
+What's nice about ComposeNet's modular structure is that we can construct arbitrary trees, or hierarchies, of skills and their compositions, which can be learned very quickly. 
 For example, here is the composition for the task "collect the red object *while* evading the green enemy *and* the blue enemy", 
 
 $$\pi_c(a \lvert s) = \underbrace{\pi(a \lvert e_c; \theta_p)}_\text{policy layer (fixed)} \; \underbrace{p(e_c \lvert e_r, e_{and}; \theta_{while})}_\text{while composition}   \; \underbrace{p(e_r \lvert s; \theta_r)}_\text{collect red skill (fixed)}  \; \underbrace{p(e_{and} \lvert e_{\neg g}, e_{\neg b}; \theta_{and})}_\text{and composition} \; \underbrace{p(e_{\neg g} \lvert s; \theta_{\neg g})}_\text{evade green skill (fixed)} \; \underbrace{p(e_{\neg b} \lvert s; \theta_{\neg b})}_\text{evade blue skill (fixed)}$$
@@ -132,29 +134,37 @@ On the y-axis is either the average episodic reward or episode length over 50 ev
 <div class="container" style= "text-align: center; margin-bottom: 5pt;">
     <figure style= "display: inline-block;">
         <img src="/assets/img/2017-12-12-reusability-in-ai/Collect_2_Evade_1.png" width="350" />
-        <figcaption style= "text-align: center;">Collect blue while evading green</figcaption>
+        <figcaption style= "text-align: center;">Collect blue while evading green (0.45)</figcaption>
     </figure>
     <!--<figure style= "display: inline-block;">-->
         <!--<img src="/assets/img/2017-12-12-reusability-in-ai/Evade_0_and_Evade_1.png" width="350" />-->
-        <!--<figcaption style= "text-align: center;">Evade red and green</figcaption>-->
+        <!--<figcaption style= "text-align: center;">Evade red and green (8.28)</figcaption>-->
     <!--</figure>-->
     <figure style= "display: inline-block;">
         <img src="/assets/img/2017-12-12-reusability-in-ai/Collect_0_then_Collect_1.png" width="350px" />
-        <figcaption style= "text-align: center;">Collect red then green</figcaption>
+        <figcaption style= "text-align: center;">Collect red then green (0.53)</figcaption>
     </figure>
     <figure style= "display: inline-block;">
         <img src="/assets/img/2017-12-12-reusability-in-ai/Collect_0_Evade_1_Evade_2.png" width="350px" />
-        <figcaption style= "text-align: center;">Collect red while evading green and blue</figcaption>
+        <figcaption style= "text-align: center;">Collect red while evading green and blue (0.01)</figcaption>
     </figure>
 </div>
 
-The orange line (ComposeNet) corresponds to learning compositions on top of skills. 
-It always learns the task to near optimality. 
-Hence, it is possible to learn to compose skills in this modular way and reuse them for many different tasks. 
-It is also more efficient to do so than learn the task from scratch (solid blue line).
-This is because ComposeNet only needs to train the composition layer to map two skills embeddings to an embedding for the composed task rather than learn everything from scratch.
+In the brackets is the zero-shot reward for the transfer setting (explained in the next subsection).
 
-Also shown is what happens if the pre-trained skills are provided as actions to the agent (metacontroller).
+
+The orange line (ComposeNet) is our method. 
+It always learns the task to near optimality. 
+Hence, it is possible to learn to compose already learned skills in this modular way. 
+Note that the same skills are reused for many different tasks without modification.
+It is more efficient to do so than learn the task from scratch (solid blue line) every time.
+
+ComposeNet only needs to train the composition layer to map two or more skills embeddings to the composed task rather than learn everything from scratch.
+This big advantage is afforded to it by its modular structure and conditional independence of policies from the state, given the embeddings. 
+In the following section, we provide further evidence of the importance of composition by showing that slightly modifying single skills does not work as well as composing the correct ones.
+So the advantage of the architecture is not just in being able to pre-train embeddings and use them over and over again, but also in being able to compose many of them together to solve unseen tasks quickly.
+
+Also shown here is what happens if the pre-trained skills are provided as actions to the agent (metacontroller).
 Initially we see a quick jump in average reward, but optimality is slow.
 To understand this let's take the example of the "collect blue object while evading the green enemy" task.
 Provided an option to get to the blue object, the agent quickly learns that some of the times it can get a large reward by making a beeline to it.
@@ -165,7 +175,7 @@ The optimal behavior is blending the two skills together to make progress toward
 
 For more results, check out our [Arxiv paper](https://arxiv.org/abs/1711.11289)!
 
-### Zero Shot Compositions
+#### Zero Shot Compositions
 
 Can these functions learn specific compositions and apply them to unseen settings? 
 For example, if I train a layer to do the *while* composition on all but one composed task, and test on the held-out task, will it generalize to it? 
@@ -174,28 +184,39 @@ It shows good zero-shot transfer (high rate of success with 0 training steps) an
 
 ### Are the skills really that important?
 
-The advantage of this modular architecture we call ComposeNet is that for any new task, one only needs to train the composition layer to map embeddings from skills to the composed task.
-But are the skills really that important?
-What if we gave the network the wrong skills?
-Will it still learn the overall task somehow by just storing the control policy in only the composition layer?
-Or what if we simply re-initialize a new policy layer on top of one of the skills and retrain that to the composed task?
+The advantage of the modular architecture of ComposeNet is that for any new task, one only needs to train the composition layer to map embeddings from skills to the composed task.
+But what if we gave the network the wrong skills?
+Do the embeddings really learn skill specific representations or will the wrong embeddings work just as well?
+Also, what if we slightly modify one of the skills, let's say by re-initializing a new policy layer, and try to train that to the composed task?
+Does the composition really give us an advantage, or will any embedding do just as well with a fresh layer on top?
+In other words, did we do some ablations!?
 
 {% include caption_img.html url="/assets/img/2017-12-12-reusability-in-ai/Collect_0_Evade_1_wrongskills.png" width="1000" description="Collect red while evade green task with the incorrect skills."  %}
 
-In the above graph, $$C()$$ denotes a composition function. 
-The lines that just have the skills markings are for the case when a fresh policy layer is trained on top of that skill.
+In the graph above, $$C()$$ denotes a composition function, ex. $$C(red, green)$$ means ComposeNet using red and green skills. 
+The lines that just have skills markings, ex. $$green$$, are the case when only a single skill embedder is used, and a fresh policy layer is trained on top of the embeddings it produces to try to control the composed task.
 The task is to "collect the red object while evading green enemy".
 
 This shows us a few things. 
 Firstly, using any other skills than the correct ones does not perform as well. 
 
-$$C(\text{red}, \neg \text{green})$$ is the case of using the skills "collect green object" and "evade red enemy", i.e. the opposite of what the task requires.
+Next, $$C(\text{red}, \neg \text{green})$$ is the case of using the skills "collect green object" and "evade red enemy", i.e. the opposite of what the task requires.
 This performs nearly as well as the correct skills because you can invert the policy for collect to evade and almost invert the policy for evade to collect.
 Given two completely irrelevant skills, "collect blue object" and "evade blue enemy", the task is not learned at all.
-Retraining a policy layer on top of "collect red object" skill also gets close but not all the way to the best average reward.
-Retraining a policy layer on top of "evade green enemy" skill does not solve the task because this skill says nothing about the red object which is necessary to get positive reward in this task.
-This shows that the skill embeddings are encoding useful information about the objects they are concerned with and that composing the correct embeddings gives the best result.
+Meaning, compositions of relevant skills performs better than irrelevant skills.
 
+
+Finally, retraining a fresh policy layer on top of the "collect red object" skill embedding also gets close but not all the way to the best average reward.
+Retraining a policy layer on top of "evade green enemy" skill does not solve the task, likely because the embedding is not informative on the red object, which is necessary to carry out this task.
+This shows that the skill embeddings are encoding useful information about the objects they are concerned with, and that composition of all the correct skills gives the best result.
+
+
+### Conclusion
+Our framework ComposeNet allows an agent to compose simple skills into a hierarchy to solve complicated tasks. 
+The skills are learned once and can be reused for multiple compositions. 
+Key in the framework are skill-state embeddings and a trainable composition function. 
+Moreover, when testing on composed tasks it has never seen before, ComposeNet shows some zero-shot generalization capability, and quickly converges with few environment samples. 
+Stay tuned for results on more complicated domains, such as Minecraft!
 
 ### References
 [1] T. G. Dietterich. Hierarchical reinforcement learning with the maxq value function decomposition. J. Artif. Intell. Res.(JAIR), 13(1):227–303, Nov. 2000.
