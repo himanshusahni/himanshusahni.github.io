@@ -128,8 +128,8 @@ and the network,
 
 So how well does this architecture do? 
 Here are graphs for some composed tasks. 
-On the x-axis is always number of training steps. 
-On the y-axis is either the average episodic reward or episode length over 50 evaluation runs.
+On the x-axis is number of training steps. 
+On the y-axis is the average episodic reward over 50 evaluation runs.
 
 <div class="container" style= "text-align: center; margin-bottom: 5pt;">
     <figure style= "display: inline-block;">
