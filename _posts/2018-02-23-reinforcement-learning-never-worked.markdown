@@ -63,7 +63,7 @@ This problem is so hard because there can be no right answer in general - there 
 
 #### Off to a good start.
 
-The famous Bellman update only guarantee convergence to the optimal value function if every state is visited an infinite number of times and every action is tried an infinite number of times in it.
+The famous Bellman update only guarantees convergence to the optimal value function if every state is visited an infinite number of times and every action is tried an infinite number of times in it.
 So right off the bat, we need an infinite samples to learn, and we need them everywhere!
 
 You may say something like "Why obsess over optimality?"
