@@ -148,7 +148,7 @@ Again, the core problem is that of controlling exploration to see similar distri
 For continuous action spaces, the most popular methods are *on-policy*.
 On-policy methods can only use samples consistent with the current policy that is being executed.
 This also means that as soon as you update your current policy, everything you have experienced in the past becomes immediately unusable.
-Most algorithms you hear of in the weird domain with orange humans and animals that look like a bunch of piping ([Mujocu](http://www.mujoco.org/)), are on-policy.
+Most algorithms you hear of in the weird domain with orange humans and animals that look like a bunch of piping ([Mujoco](http://www.mujoco.org/)), are on-policy.
 
 {% include two_img_caption.html url1="/assets/img/2018-02-17-reinforcement-learning-never-worked/cheetah.gif" width1="530" description1="A cheetah" url2="/assets/img/2018-02-17-reinforcement-learning-never-worked/pipage.gif" width2="300" description2="Piping"  %}
 
@@ -233,7 +233,7 @@ There are other ways of learning without direct rewards [[5]](https://dl.acm.org
 (Stay tuned for an ICML workshop on Goal Specification in RL!)
 
 Another promising way to deal with long horizons (hugely delayed rewards) is hierarchical reinforcement learning.
-I was surprised when this did not make it into Alex's post because it is the most intuitively appealing solution to this problem (but I guess I'm [biased](http://127.0.0.1:4000/2017/12/26/reusability-in-ai.html)!)
+I was surprised when this did not make it into Alex's post because it is the most intuitively appealing solution to this problem (but I guess I'm [biased](http://himanshusahni.github.io/2017/12/26/reusability-in-ai.html)!)
 
 Hierarchical RL attempts to decompose a long horizon problem into a series of goals and subgoals.
 By decomposing the problem, we are effectively dilating the time scale at which decisions are being made.
