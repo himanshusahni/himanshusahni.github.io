@@ -63,7 +63,7 @@ This problem is so hard because there can be no right answer in general - there 
 
 #### Off to a good start.
 
-The famous Bellman equations only guarantee convergence to the optimal value function if every state is visited an infinite number of times and every action is tried an infinite number of times in it.
+The famous Bellman update only guarantee convergence to the optimal value function if every state is visited an infinite number of times and every action is tried an infinite number of times in it.
 So right off the bat, we need an infinite samples to learn, and we need them everywhere!
 
 You may say something like "Why obsess over optimality?"
@@ -76,7 +76,7 @@ It is even harder to provide any sort of guarantees on it.
 More on this later.
 
 Ok so let's just say we are happy with an approximately optimal solution (whatever that means).
-The number of samples needed to get the same approximation increases exponentially with the state *and* action space.
+The number of samples needed to get the same approximation increases exponentially with the state and action space.
 
 #### But wait, it gets worse.
 
@@ -85,7 +85,7 @@ You can add some heuristics, such as curiosity [[2]](http://people.idsia.ch/~jue
 After all, you have no reason to believe there's a bigger or smaller payoff behind any action in a particular state unless you try it.
 
 What's more, model-free reinforcement learning algorithms typically try to solve the most general formulation of the problem.
-As in, there are no assumptions about the form of the state distribution, the transition dynamics of the environment or of optimal policies (for eg. [[3]](https://arxiv.org/abs/1707.06347))
+As in, there are very few assumptions about the form of the state distribution, the transition dynamics of the environment or of optimal policies (for eg. [[3]](https://arxiv.org/abs/1707.06347))
 
 And this makes sense.
 Just because you see a great reward once doesn't mean you will always get it every time you are in that state and take that action.
@@ -164,7 +164,7 @@ It'll get worse in the next subsection though.
 
 To summarize, these issues arise because of a core problem in reinforcement learning and more broadly in all of AI: exploration. 
 
-RainbowDQN takes 83 hours to learn because it does not come preloaded with notions of a video game is, that enemies shoot bullets at you, that bullets are bad, that a bunch of pixels that seem to stay together is a bullet, that bullets exist in the world, that objects exist, that the world is organized into anything more than a maximum entropic distribution. 
+RainbowDQN takes 83 hours to learn because it does not come preloaded with notions of what a video game is, that enemies shoot bullets at you, that bullets are bad, that a bunch of pixels that seem to stay together is a bullet, that bullets exist in the world, that objects exist, that the world is organized into anything more than a maximum entropic distribution. 
 All of these are priors that help us, humans, dramatically limit our exploration to a small set of high quality states.
 DQN has to learn all of these by mostly random exploration.
 That it learns to beat expert humans, and centuries of wisdom in the case of AlphaZero, is still very surprising.
@@ -186,7 +186,7 @@ That it learns to beat expert humans, and centuries of wisdom in the case of Alp
 ### Long term credit assignment
 ##### Reward functions, their design, and transfer
 
-You know how some people will scratch their lottery ticket only with a lucky coin because one time they did and they won a lot of money?
+You know how some people will scratch lottery tickets only with a lucky coin because one time they did and they won a lot of money?
 RL agents are basically playing the lottery at every step and trying to figure out what they did to hit the jackpot.
 They are maximizing a single number which is the result of actions over multiple time steps mixed in with a good amount of environment randomness.
 Figuring out which series of actions are actually responsible for the high reward is the problem of credit assignment.
@@ -275,7 +275,7 @@ Watching DQN play atari from visual input, or AlphaGo defeating the world champi
 I'm excited by the future RL will bring for AI.
 
 
-*Special thanks to [Ashley Edwards](https://www.cc.gatech.edu/~aedwards/) and Yannick Schroecker for the valuable inputs!*
+*Special thanks to [Ashley Edwards](https://www.cc.gatech.edu/~aedwards/) and Yannick Schroecker for their valuable inputs!*
 <!--<span style="font-weight:bold;"></span> -->
 
 ### References
