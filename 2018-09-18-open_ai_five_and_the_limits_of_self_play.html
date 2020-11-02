@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Himanshu Sahni</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Himanshu Sahni</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="index.html">About</a></li>
+            <li><a href="work.html">Research</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="work.html">CV</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	
+	<!-- +++++ Post +++++ -->
+	<div id="white">
+	    <div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<p><img src="assets/img/me.png" width="50px" height="50px"> <ba>Himanshu Sahni</ba></p>
+					<p><bd>September 18, 2018</bd></p>
+					<h4>OpenAI Five and the limits of self-play</h4>
+					<p><img class="img-responsive" src="assets/img/blog01.jpg" alt=""></p>
+                    <p> A few weeks ago, OpenAI attempted a new major milestone in AI development, a (nearly) full game of Dota2 against some of the best human players. 
+Although the OpenAI Five was defeated by both of its professional opponents, the level of play was high and at times the match looked fairly even. 
+This is amazing as the full game of Dota2 is very complex. 
+Even more incredibly, the agent was trained using a relatively simple and very general reinforcement learning algorithm, <a href="https://blog.openai.com/openai-baselines-ppo/">PPO</a>.</p>
+
+                    <p>While the network structure has many bells and whistles to incorporate the complexities of the game, the algorithm itself is general enough to be applied to <a href="https://blog.openai.com/learning-dexterity/">robotics</a>, <a href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Zoph_Learning_Transferable_Architectures_CVPR_2018_paper.pdf">image recognition</a>, and many more tasks.
+                    Congratulations to OpenAI and a huge win for RL!</p>
+                    <p><figure class="image" style= "text-align: center; margin-bottom: 5pt;"><img src="assets/img/2018-09-18-open_ai_five_and_the_limits_of_self_play/network_diagram_08_06_2018.png" alt="Credit: <a href='https://blog.openai.com/openai-five-benchmark-results/'>OpenAI</a>" width="600" align="middle"><figcaption style= "text-align: center;"></figcaption>Credit: <a href='https://blog.openai.com/openai-five-benchmark-results/'>OpenAI</a></figure></p>
+
+                    <p> The algorithm was used in conjunction to what is now a pretty popular trick of self-play. 
+In environments that are competitive and easy to simulate, self-play refers to the agent learning purely by playing against itself. 
+This way, simulations can be run very fast on thousands of CPUs/GPUs and years of experience collected every hour (256 GPUs and 128,000 CPUs for OpenAI Five). 
+Self play was also used in the training of <a href="https://deepmind.com/blog/alphago-zero-learning-scratch/">AlphaGo Zero</a>.</p>
+
+<p> Here, I have jotted down a few quick thoughts on why this extremely useful simulation trick of self-play puts a limitation to the performance of the agent. 
+I will argue that while some of the deficiencies of the bots may be able to be quickly “trained away”, there are fundamental weaknesses in self play that will limit performance even after a lot of training. 
+OpenAI Five may eventually beat the best human players, but as we make environments more complex, these issues will become more and more apparent.</a>
+
+<p>My comments are only about the learning strategy on a very high level and not game commentary as I am not a Dota player myself. 
+For in-depth commentary, I found <a href="https://twitter.com/Smerity/status/1032810003466350592">this</a> to be great. 
+Also, there is a <a href="https://blog.openai.com/openai-five/">ton</a> <a href="https://blog.openai.com/openai-five-benchmark-results/">of</a> <a href="https://blog.openai.com/the-international-2018-results/">material</a> on this topic by OpenAI themselves and you can watch the games yourself <a href="https://www.twitch.tv/videos/300508024?t=07h55m16s">here</a> and <a href="https://www.twitch.tv/videos/300907006?t=07h44m03s">here</a>.</p> 
+
+<h5>Playing against oneself.</h5>
+<p>OpenAI five is really good at a single playing style. 
+That is why it is often so hard to beat the <a href="https://blog.openai.com/dota-2/">first time</a>.
+But in competitive games, once you figure out the opponent’s strategy, you can make it less effective.
+Human players can do this by observing bot behavior during the matches and planning counters.</p>
+
+<p>OpenAI Five, on the other hand, simply rolls out its learnt policy during human matches.
+The policy takes into account the parts of the opponent's state that are visible to it and hence can react to developments in the game, but there is no attempt to update model weights based on human play.
+So it is unable to react to human opponent's meta-strategy.</p>
+
+<p>In gaming, the meta-strategy (or just meta) is how the game or specific heroes are generally played at a higher level than reactions to in-game developments. 
+OpenAI's original <a href="https://blog.openai.com/dota-2/">1v1 bot</a> was initially more powerful than a pro-gamer, but human players quickly identified its playing style and developed many counter metas within the <a href="https://www.reddit.com/r/DotA2/comments/6t8qvs/openai_bots_were_defeated_atleast_50_times/">same event</a>.
+
+<p>Self-play could overcome this if, during training time, the agent was pushed to encounter all different metas and hence forced to develop a single optimal policy which counters them all.</p>
+
+<h5>Agent randomization</h5>
+<p>A standard way to do this in self-play is to sometimes play against an earlier version of oneself. 
+The idea is that this will provide enough variation in opponents to avoid overfitting to itself.
+OpenAI Five plays 80% of its games against itself and 20% against a former version of itself.</p> 
+
+<p>This works well for stabilizing training, but is not the complete solution. 
+The only opponent the agent has seen at par or better than itself is its own (future) policy.
+Previous versions of the agent will be weaker than the current version.
+Additionally, it is unlikely to see all good metas that exist in Dota2 as it is so complex and gradient descent training progresses along a single path which depends on the random seed of the network and the environment.
+Moreover, metas change over time as players discover better ways to play the game and the game itself is updated (unlike Go which has remained unchanged for centuries).</p>
+
+<p>In short, self play does not provide the agent enough variance in advanced metas to counter all strategies human players can form against it in a sufficiently complex environment.</p>
+
+<p>This shows up in the value estimates of the trained agent.
+OpenAI Five’s value estimates were remarkably good for the benchmark team.</p>
+
+<p> "After the game 1 draft, OpenAI Five predicted a 95% win probability, even though the matchup seemed about even to the human observers. It won the first game in 21 minutes and 37 seconds. After the game 2 draft, OpenAI Five predicted a 76.2% win probability, and won the second in 24 minutes and 53 seconds." - <a href="https://blog.openai.com/openai-five-benchmark-results/">OpenAI</a></p>
+
+<p>This is perhaps because the benchmark team played at a level below OpenAI Five and with a meta it has seen.</p>
+
+<p> But for the pro team, the initial estimates of winning were optimistic despite the end result, perhaps because they employed a play style the agent never encountered during training and hence has an inaccurate estimate.</p>
+<p>"... [OpenAI Five] maintaining a good chance of winning for the first 20-35 minutes of both games." - <a href="https://blog.openai.com/the-international-2018-results/">OpenAI</a></p>
+
+<br>
+<div style="border: 2px solid #CFB53B; padding: 10px;">
+<span style="font-weight:bold">Side note or "There is no I in Fve":</span> 
+OpenAI Five uses a bunch of <a href="https://gist.github.com/dfarhi/66ec9d760ae0c49a5c492c9fae93984a">reward shaping</a>, something that can be easily misused as warned by <a href="https://blog.openai.com/faulty-reward-functions/">OpenAI themselves</a>. 
+One of the shaped rewards is called Team Spirit. 
+It is a parameter that incentivizes agents to maximize overall team reward rather than just personal reward as the training progresses. 
+One of the human strategies that led to OpenAI Five's downfall against pro team <a href="https://liquipedia.net/dota2/PaiN_Gaming">paiN Gaming</a> was to supercharge a single player, in this case hfn, who then was able to carry the team in later stages.
+It is possible that OpenAI Five has never encountered this strategy in its training as Team Spirit encourages each individual hero to be less selfish about its own gains and OpenAI Five has never learned from an opponent without Team Spirit.
+</div>
+<br>
+
+<p>OpenAI themselves have employed a partial solution to this kind of overfitting in an earlier project by training ensembles of agents in parallel and playing against all of them.
+Read more about it <a href="https://blog.openai.com/competitive-self-play/#overfitting">here</a>.
+It is not mentioned whether this was done for OpenAI Five as well.</p>
+
+<h5>Domain Randomization</h5>
+
+<p>But OpenAI did a bit more than play against earlier versions of itself. They employed a trick called domain randomization that has also been successful in other applications (<a href="https://blog.openai.com/learning-dexterity/">[1]</a>, <a href="https://arxiv.org/pdf/1703.06907.pdf">[2]</a>).</p>  
+
+<p><figure class="image" style= "text-align: center; margin-bottom: 5pt;"><img src="assets/img/2018-09-18-open_ai_five_and_the_limits_of_self_play/domain_randomization.png" alt="Domain Randomization involves randomly varying aspects of the training environment, such as colors or physics, to make the network more robust. Credit: <a href='https://arxiv.org/pdf/1703.06907.pdf'>Tobin et al.</a>" width="400" align="middle"><figcaption style= "text-align: center;"></figcaption>Domain Randomization involves randomly varying aspects of the training environment, such as colors or physics, to make the network more robust. Credit: <a href='https://arxiv.org/pdf/1703.06907.pdf'>Tobin et al.</a></figure></p>
+
+
+<p>Examples of randomizations used by OpenAI Five are increasing/decreasing a hero's speed or starting health, assigning lane's randomly by providing shaping rewards etc.
+These randomizations make the training even more robust by presenting an unseen play style, forcing the agent to explore more of its state space.
+But this is not the same as a directed meta that is perhaps made to counteract its own.
+Human play can exhibit a mode that is very far from the uniform sampling that domain randomization provides.</p>
+
+<h5>Solution</h5>
+<p>A solution could be a fast moving model of the meta play that updates according to opponent strategy. 
+Data from professional human matches can be used to learn this fast meta layer and allow the agent to predict and quickly adapt to the style of play being used by humans. 
+This could also be used to construct a domain randomization model that goes beyond just perturbing the physics or graphics and randomizes between entirely different human developed metas.</p> 
+
+<p>Pure self-play as applied to OpenAI Five is blind to the problem of having to learn high level strategies from just a few samples, such as a single game of Dota2.
+OpenAI Five plays centuries of games against itself every day, so a single game against humans will hardly make a difference to network parameters.
+But humans are really good at this, which is why they are able to counter OpenAI Five after observing its playing style.
+It is an essentially skill for AI that wants to compete against, or hopefully, work with us.
+Self-play combined with such a strategy could be very powerful in learning competitive games.</p>
+
+					<br>
+					<hr>
+					<p><a href="blog.html">Back</a></p>
+				</div>
+
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /white -->
+	
+	
+	
+	
+	<!-- +++++ Footer Section +++++ -->
+	
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3">
+					<p>
+						<a href="https://scholar.google.com/citations?user=OcjcjyAAAAAJ&hl=en">Scholar</a><br/>
+					</p>
+				</div><!-- /col-lg-3 -->
+				
+				<div class="col-lg-3">
+					<p>
+						<a href="https://www.linkedin.com/in/himanshu-sahni-4749a61b0/">LinkedIn</a><br/>
+					</p>
+				</div><!-- /col-lg-3 -->
+				
+				<div class="col-lg-3">
+					<p>
+						<a href="https://twitter.com/him_sahni">Twitter</a>
+                    </p>
+				</div><!-- /col-lg-3 -->
+			
+				<div class="col-lg-3">
+					<p>
+						<a href="https://github.com/himanshusahni">GitHub</a>
+                    </p>
+				</div><!-- /col-lg-3 -->
+			</div>
+		
+		</div>
+	</div>
+	
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/bootstrap.min.js"></script>
+  </body>
+</html>
